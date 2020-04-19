@@ -71,8 +71,10 @@ spec:
           imagePullPolicy: "Always"
           name: static
           command: ["/bin/sh"]
-          args: ["-c", 'nginx "-g daemon off;"']
+          args: ["-c", 'ln -s /movies_logs/static /var/log/nginx; nginx "-g daemon off;"']
           volumeMounts:
+            - name: movies-logs-dev
+              mountPath: /movies_logs
             - name: config
               mountPath: "/etc/nginx/sites-enabled"
               readOnly: true
@@ -85,6 +87,9 @@ spec:
             requests:
               memory: 16Mi
       volumes:
+        - name: movies-logs-dev
+          persistentVolumeClaim:
+            claimName: movies-logs-pv-claim-dev
         - name: config
           configMap:
             name: static-nginx-config-dev

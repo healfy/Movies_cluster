@@ -33,6 +33,7 @@ mkdir -p $DIRROOT/local_files/media/data
 mkdir -p $DIRROOT/local_files/movies/mdb_movies-dev/data
 mkdir -p $DIRROOT/local_files/movies/static_movies-dev/data
 mkdir -p $DIRROOT/local_files/movies/rabbit_movies-dev/data
+mkdir -p $DIRROOT/local_files/movies_logs-dev/static
 
 
 if [ -L $BASE_NODE_DIR ]; then
