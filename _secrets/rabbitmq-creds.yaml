@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  namespace: <<__namespace__>>
-  name: rabbitmq-creds-movies-<<__namespace__>>
-type: Opaque
-stringData:
-  url: 'redis://redis-movies-dev/1'

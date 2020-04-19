@@ -51,7 +51,6 @@ kubectl apply -f $deploy_files/_storages
 for db in $(ls ./_databases/); do
   cp ./_databases/$db $deploy_files/_databases/$db
   sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_databases/$db
-  sed -i -e "s|<<__rabbitmq_image_address__>>|${docker_addr_rabbitmq}|g" $deploy_files/_databases/$db
 done
 kubectl apply -f $deploy_files/_databases
 
