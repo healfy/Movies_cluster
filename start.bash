@@ -51,14 +51,15 @@ kubectl apply -f $deploy_files/_storages
 for db in $(ls ./_databases/); do
   cp ./_databases/$db $deploy_files/_databases/$db
   sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_databases/$db
+  sed -i -e "<<__rabbitmq_image_address__>>|${docker_addr_rabbitmq}|g" $deploy_files/_databases/$db
 done
 kubectl apply -f $deploy_files/_databases
 
 cp ./static-nginx/deployment-$BRANCH.yaml $deploy_files/static-nginx_deployment-$BRANCH.yaml
-sed -i -e "s|<<__your_host_name__>>|$HOSTNAME|g" $deploy_files/static-nginx_deployment-$BRANCH.yaml
+sed -i -e "s|<<__static_image_address__>>|${docker_addr_static}|g" $deploy_files/static-nginx_deployment-$BRANCH.yaml
 
 cp ./media-nginx/deployment-$BRANCH.yaml $deploy_files/media-nginx_deployment-$BRANCH.yaml
-sed -i -e "s|<<__your_host_name__>>|$HOSTNAME|g" $deploy_files/media-nginx_deployment-$BRANCH.yaml
+sed -i -e "s|<<__static_image_address__>>|${docker_addr_static}|g" $deploy_files/media-nginx_deployment-$BRANCH.yaml
 
 
 kubectl  apply -f $deploy_files/

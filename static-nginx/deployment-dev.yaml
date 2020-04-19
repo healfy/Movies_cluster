@@ -67,7 +67,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 15
       containers:
-        - image: docker.io/baratrum/static:latest
+        - image: <<__static_image_address__>>:latest
           imagePullPolicy: "Always"
           name: static
           command: ["/bin/sh"]

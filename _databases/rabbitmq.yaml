@@ -31,7 +31,7 @@ spec:
       hostname: rabbitmq-movies-<<__namespace__>>
       containers:
         - name: rabbitmq-movies
-          image: rabbitmq:3.7.19
+          image: <<__rabbitmq_image_address__>>:latest
           ports:
             - containerPort: 5672
           env:

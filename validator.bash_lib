@@ -10,13 +10,13 @@ function validate {
       exit 1
     fi
 
-    current_branch=`git rev-parse --abbrev-ref HEAD`
-
-    if [[ ${current_branch} != ${BONUM_BRANCH} ]]; then
-      echo -e "\033[31mТекущая ветка ${current_branch} не совпадает с версией из файла .env/.env.local (${BONUM_BRANCH}).\033[0m"
-      echo -e "\033[31mДля продолжения обновления переключитесь в ветку ${BONUM_BRANCH}\033[0m"
-      exit 1
-    fi
+#    current_branch=`git rev-parse --abbrev-ref HEAD`
+#
+#   if [[ ${current_branch} != ${BONUM_BRANCH} ]]; then
+#      echo -e "\033[31mТекущая ветка ${current_branch} не совпадает с версией из файла .env/.env.local (${BONUM_BRANCH}).\033[0m"
+#      echo -e "\033[31mДля продолжения обновления переключитесь в ветку ${BONUM_BRANCH}\033[0m"
+#      exit 1
+#    fi
 
     if [[ "$BONUM_BRANCH" == master ]]; then
       BONUM_BRANCH="prod"
