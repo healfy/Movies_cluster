@@ -28,6 +28,11 @@ if [ -z $DIRROOT ]; then
 fi
 cd $DIRROOT
 
+mkdir -p $DIRROOT/local_files/movies
+mkdir -p $DIRROOT/local_files/media/data
+mkdir -p $DIRROOT/local_files/movies/mdb_movies-dev/data
+mkdir -p $DIRROOT/local_files/movies/static_movies-dev/data
+
 
 if [ -L $BASE_NODE_DIR ]; then
   echo -e "\033[32mСоздана ссылка $BASE_NODE_DIR.\033[0m"
