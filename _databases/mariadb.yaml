@@ -43,6 +43,11 @@ spec:
               secretKeyRef:
                 name: mariadb-<<__namespace__>>
                 key: password
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-<<__namespace__>>
+                key: password
           - name: MYSQL_DATABASE
             valueFrom:
               secretKeyRef:
