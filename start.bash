@@ -33,28 +33,28 @@ mkdir -p $deploy_files/_storages
 kubectl create namespace $BRANCH
 
 # Создаем secrets
-for secret in $(ls $tmpl_files/_secrets/); do
-  cp $tmpl_files/_secrets/$secret $deploy_files/_secrets/$secret
+for secret in $(ls ./_secrets/); do
+  cp ./_secrets/$secret $deploy_files/_secrets/$secret
   sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_secrets/$secret
   sed -i -e "s|<<__code__>>|${BRANCH^^}|g" $deploy_files/_secrets/$secret
 done
 kubectl apply -f $deploy_files/_secrets
 
 # Создаем storages
-for st in $(ls $tmpl_files/_storages/); do
-  cp $tmpl_files/_storages/$st $deploy_files/_storages/$st
+for st in $(ls ./_storages/); do
+  cp ./_storages/$st $deploy_files/_storages/$st
   sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_storages/$st
 done
 kubectl apply -f $deploy_files/_storages
 
 # Создаем databases
-for db in $(ls $tmpl_files/_databases/); do
-  cp $tmpl_files/_databases/$db $deploy_files/_databases/$db
+for db in $(ls ./_databases/); do
+  cp ./_databases/$db $deploy_files/_databases/$db
   sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_databases/$db
 done
 kubectl apply -f $deploy_files/_databases
 
-cp $tmpl_files/static-nginx/deployment-$BRANCH.yaml $deploy_files/static-nginx_deployment-$BRANCH.yaml
+cp ./static-nginx/deployment-$BRANCH.yaml $deploy_files/static-nginx_deployment-$BRANCH.yaml
 sed -i -e "s|<<__your_host_name__>>|$HOSTNAME|g" $deploy_files/static-nginx_deployment-$BRANCH.yaml
 
 kubectl  apply -f $deploy_files/

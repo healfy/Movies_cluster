@@ -79,8 +79,6 @@ spec:
             - name: static-movies-dev
               mountPath: /app/static-movies
               readOnly: true
-            - name: media
-              mountPath: /app/media-movies
           resources:
             limits:
               memory: 64Mi
