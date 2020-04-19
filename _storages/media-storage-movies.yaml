@@ -2,9 +2,9 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   namespace: <<__namespace__>>
-  name: currencies-pv-volume-<<__namespace__>>
+  name: media-pv-volume-<<__namespace__>>
   labels:
-    app: currencies-<<__namespace__>>
+    app: media-<<__namespace__>>
 spec:
   storageClassName: manual
   capacity:
@@ -20,9 +20,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   namespace: <<__namespace__>>
-  name: currencies-pv-claim-<<__namespace__>>
+  name: media-pv-claim-<<__namespace__>>
   labels:
-    app: currencies-<<__namespace__>>
+    app: media-<<__namespace__>>
 spec:
   storageClassName: manual
   accessModes:
@@ -32,4 +32,4 @@ spec:
       storage: 10Gi
   selector:
     matchLabels:
-      app: currencies-<<__namespace__>>
+      app: media-<<__namespace__>>

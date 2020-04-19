@@ -1,0 +1,122 @@
+---
+# ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: dev
+  name: media-ing-dev
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: media.movies.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: media-dev
+              servicePort: 80
+
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: dev
+  labels:
+    app: media-dev
+    track: dev
+    tier: backend
+  name: media-dev
+spec:
+  selector:
+    app: media-dev
+    track: dev
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: nginx
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: dev
+  labels:
+    app: media-dev
+    track: dev
+    tier: backend
+  name: media-dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: media-dev
+      track: dev
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: media-dev
+        track: dev
+        tier: backend
+    spec:
+      terminationGracePeriodSeconds: 15
+      containers:
+        - image: docker.io/baratrum/static:latest
+          imagePullPolicy: "Always"
+          name: media
+          command: ["/bin/sh"]
+          args: ["-c", 'ln -s /movies_logs/media /var/log/nginx; nginx "-g daemon off;"']
+          volumeMounts:
+            - name: movies-logs-dev
+              mountPath: /movies_logs
+            - name: config
+              mountPath: "/etc/nginx/sites-enabled"
+              readOnly: true
+            - name: media-movies-dev
+              mountPath: /app/media
+              readOnly: true
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              memory: 16Mi
+      volumes:
+        - name: movies-logs-dev
+          persistentVolumeClaim:
+            claimName: movies-logs-pv-claim-dev
+        - name: config
+          configMap:
+            name: media-nginx-config-dev
+            items:
+              - key: media-nginx-conf
+                path: default
+        - name: media-movies-dev
+          persistentVolumeClaim:
+            claimName: media-pv-claim-dev
+---
+# configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: dev
+  name: media-nginx-config-dev
+  labels:
+    app: media-dev
+    tier: backend
+    track: dev
+data:
+  media-nginx-conf: |
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        server_name _;
+        root /app;
+        access_log /var/log/nginx/access-media.log;
+        error_log /var/log/nginx/error-media.log;
+    }
