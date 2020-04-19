@@ -36,17 +36,17 @@ spec:
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:
-                name: moviesdb-<<__namespace__>>
+                name: mariadb-<<__namespace__>>
                 key: username
           - name: MYSQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: moviesdb-<<__namespace__>>
+                name: mariadb-<<__namespace__>>
                 key: password
           - name: MYSQL_DATABASE
             valueFrom:
               secretKeyRef:
-                name: moviesdb-<<__namespace__>>
+                name: mariadb-<<__namespace__>>
                 key: database
           volumeMounts:
             - mountPath: /var/lib/mysql
