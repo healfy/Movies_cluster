@@ -57,6 +57,10 @@ kubectl apply -f $deploy_files/_databases
 cp ./static-nginx/deployment-$BRANCH.yaml $deploy_files/static-nginx_deployment-$BRANCH.yaml
 sed -i -e "s|<<__your_host_name__>>|$HOSTNAME|g" $deploy_files/static-nginx_deployment-$BRANCH.yaml
 
+cp ./media-nginx/deployment-$BRANCH.yaml $deploy_files/media-nginx_deployment-$BRANCH.yaml
+sed -i -e "s|<<__your_host_name__>>|$HOSTNAME|g" $deploy_files/media-nginx_deployment-$BRANCH.yaml
+
+
 kubectl  apply -f $deploy_files/
 
 # Настройка / перезапуск Nginx:
