@@ -1,0 +1,36 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: <<__namespace__>>
+  name: rabbit-movies-pv-volume-<<__namespace__>>
+  labels:
+    type: local
+    app: rabbit-movies-<<__namespace__>>
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/docker_local_files_<<__namespace__>>/movies/rabbit_movies-<<__namespace__>>/data"
+    type: Directory
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: <<__namespace__>>
+  name: rabbit-movies-pv-claim-<<__namespace__>>
+  labels:
+    app: rabbit-movies-<<__namespace__>>
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: rabbit-movies-<<__namespace__>>

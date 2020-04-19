@@ -1,0 +1,35 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: <<__namespace__>>
+  name: currencies-pv-volume-<<__namespace__>>
+  labels:
+    app: currencies-<<__namespace__>>
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/docker_local_files_<<__namespace__>>/media/data"
+    type: Directory
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: <<__namespace__>>
+  name: currencies-pv-claim-<<__namespace__>>
+  labels:
+    app: currencies-<<__namespace__>>
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels:
+      app: currencies-<<__namespace__>>

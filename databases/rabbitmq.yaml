@@ -1,0 +1,55 @@
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: <<__namespace__>>
+  name: rabbitmq-movies-<<__namespace__>>
+  labels:
+    app: rabbitmq-movies-<<__namespace__>>
+spec:
+  selector:
+    app: rabbitmq-movies-<<__namespace__>>
+  ports:
+    - port: 5672
+
+---
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: <<__namespace__>>
+  name: rabbitmq-<<__namespace__>>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-<<__namespace__>>
+    spec:
+      # Для rabbitMQ обязательно задать hostname, т.к. он хранит данные на основе того, что он называет «именем узла», по умолчанию используется имя хоста.
+      hostname: rabbitmq-movies-<<__namespace__>>
+      containers:
+        - name: rabbitmq-movies
+          image: rabbitmq:3.7.19
+          ports:
+            - containerPort: 5672
+          env:
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-movies-<<__namespace__>>
+                key: username
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-movies-<<__namespace__>>
+                key: password
+          volumeMounts:
+            # Это возможно придётся отменить или переделать хранилище, иначе фалы сохраняются на одной ноде, где запустился контейнер
+            - mountPath: /var/lib/rabbitmq
+              name: rabbitdb
+      volumes:
+        - name: rabbitdb
+          persistentVolumeClaim:
+            claimName: rabbit-movies-pv-claim-<<__namespace__>>

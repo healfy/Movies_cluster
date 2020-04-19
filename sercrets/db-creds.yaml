@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: <<__namespace__>>
+  name: mariadb-<<__namespace__>>
+type: Opaque
+stringData:
+  host: "mariadb-movies"
+  database: "movies_db"
+  username: "movies_user"
+  password: "<your_<<__code__>>_Postgres_DB_password_not_spase_symbol>"

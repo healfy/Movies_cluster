@@ -1,0 +1,57 @@
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: <<__namespace__>>
+  name: mariadb-movies
+  labels:
+    app: mariadb-movies
+spec:
+  selector:
+    app: mariadb-movies
+  ports:
+    - port: 5432
+
+---
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: <<__namespace__>>
+  name: mariadb-movies
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mariadb-movies
+    spec:
+      containers:
+        - name: mariadb-movies
+          image: mariadb:10.2
+          ports:
+            - containerPort: 3306
+          env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: moviesdb-<<__namespace__>>
+                key: username
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: moviesdb-<<__namespace__>>
+                key: password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: moviesdb-<<__namespace__>>
+                key: database
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: mariadb-movies-pv-claim-<<__namespace__>>
