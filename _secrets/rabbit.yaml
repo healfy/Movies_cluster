@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  namespace: <<__namespace__>>
-  name: rabbit-movies-<<__namespace__>>
-type: Opaque
-stringData:
-  username: "rabbit_user"
-  password: "your_<<__code__>>_RabbitMQ_DB_password"
