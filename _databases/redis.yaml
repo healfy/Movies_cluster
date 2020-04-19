@@ -1,0 +1,36 @@
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: <<__namespace__>>
+  name: redis-movies-<<__namespace__>>
+  labels:
+    app: redis-movies-<<__namespace__>>
+spec:
+#  type: ClusterIP
+#  type: NodePort
+  selector:
+    app: redis-movies-<<__namespace__>>
+  ports:
+    - port: 6379
+
+---
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: <<__namespace__>>
+  name: redis-movies-<<__namespace__>>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-movies-<<__namespace__>>
+    spec:
+      containers:
+        - name: redis-movies
+          image: redis:5.0.5-stretch
+          ports:
+            - containerPort: 6379

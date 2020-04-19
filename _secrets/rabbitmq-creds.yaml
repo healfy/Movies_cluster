@@ -5,4 +5,4 @@ metadata:
   name: rabbitmq-creds-movies-<<__namespace__>>
 type: Opaque
 stringData:
-  url: "amqp://rabbit_user:your_<<__code__>>_RabbitMQ_DB_password@rabbitmq-movies-<<__namespace__>>:5672/movies"
+  url: 'redis://redis-movies-dev/1'
