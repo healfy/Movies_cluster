@@ -55,15 +55,6 @@ for db in $(ls ./_databases/); do
 done
 kubectl apply -f $deploy_files/_databases
 
-cp ./static-nginx/deployment-$BRANCH.yaml $deploy_files/static-nginx_deployment-$BRANCH.yaml
-sed -i -e "s|<<__static_image_address__>>|${docker_addr_static}|g" $deploy_files/static-nginx_deployment-$BRANCH.yaml
-
-cp ./media-nginx/deployment-$BRANCH.yaml $deploy_files/media-nginx_deployment-$BRANCH.yaml
-sed -i -e "s|<<__static_image_address__>>|${docker_addr_static}|g" $deploy_files/media-nginx_deployment-$BRANCH.yaml
-
-
-kubectl  apply -f $deploy_files/
-
 # Настройка / перезапуск Nginx:
 if [ -f $deploy_files/movies_nginx_$BRANCH.conf ]; then
   echo -e "\033[32mФайл $deploy_files/movies-nginx_$BRANCH.conf уже есть и не изменён, т.к. требует настройки только 1 раз.\033[0m"
@@ -72,7 +63,7 @@ else
   if [ ${#is_nginx} == "0" ]; then
     echo -e "\033[32mNginx не найден на родительском компьютере.\033[0m"
   else
-    cp ./nginx_conf/movies-nginx_$BRANCH.conf $deploy_files/movies-nginx_$BRANCH.conf
+    cp ./nginx_conf/movies-nginx-$BRANCH.conf $deploy_files/movies-nginx_$BRANCH.conf
     sed -i -e "s|your\.host\.name\.local|${local_addr}|g" $deploy_files/movies-nginx_$BRANCH.conf
     echo -e "\033[32mСоздана конфигурация для ветки $BRANCH сервера Nginx. Может потребоваться перезапустить Nginx командами:\033[0m"
     echo -e "\033[31msudo ln -s $(pwd)/$deploy_files/movies-nginx_$BRANCH.conf /etc/nginx/sites-enabled/movies-nginx_$BRANCH.conf\033[0m"
