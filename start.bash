@@ -24,33 +24,33 @@ else
 fi
 
 mkdir -p $deploy_files
-mkdir -p $deploy_files/secrets
-mkdir -p $deploy_files/databases
-mkdir -p $deploy_files/storages
+mkdir -p $deploy_files/_secrets
+mkdir -p $deploy_files/_databases
+mkdir -p $deploy_files/_storages
 
 
 # Создаем namespace
 kubectl create namespace $BRANCH
 
 # Создаем secrets
-for secret in $(ls $tmpl_files/secrets/); do
-  cp $tmpl_files/_secrets/$secret $deploy_files/secrets/$secret
-  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/secrets/$secret
-  sed -i -e "s|<<__code__>>|${BRANCH^^}|g" $deploy_files/secrets/$secret
+for secret in $(ls $tmpl_files/_secrets/); do
+  cp $tmpl_files/_secrets/$secret $deploy_files/_secrets/$secret
+  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_secrets/$secret
+  sed -i -e "s|<<__code__>>|${BRANCH^^}|g" $deploy_files/_secrets/$secret
 done
 kubectl apply -f $deploy_files/_secrets
 
 # Создаем storages
-for st in $(ls $tmpl_files/storages/); do
-  cp $tmpl_files/_storages/$st $deploy_files/storages/$st
-  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/storages/$st
+for st in $(ls $tmpl_files/_storages/); do
+  cp $tmpl_files/_storages/$st $deploy_files/_storages/$st
+  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_storages/$st
 done
-kubectl apply -f $deploy_files/storages
+kubectl apply -f $deploy_files/_storages
 
 # Создаем databases
-for db in $(ls $tmpl_files/databases/); do
-  cp $tmpl_files/databases/$db $deploy_files/databases/$db
-  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/databases/$db
+for db in $(ls $tmpl_files/_databases/); do
+  cp $tmpl_files/_databases/$db $deploy_files/_databases/$db
+  sed -i -e "s|<<__namespace__>>|${BRANCH}|g" $deploy_files/_databases/$db
 done
 kubectl apply -f $deploy_files/_databases
 
